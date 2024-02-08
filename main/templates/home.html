@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Assistant</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h3 class="mb-4">News Assistant</h3>
+    <form id="newsForm">
+      <div class="form-group">
+        <input type="text" class="form-control" id="urlInput" placeholder="Enter URL">
+      </div>
+      <button type="button" class="btn-sm btn btn-primary mr-2" onclick="getData('summary')">Get Summary</button>
+      <button type="button" class="btn-sm btn btn-warning mr-2" onclick="getData('opinions')">Get Opinions</button>
+      <button type="button" class="btn-sm btn btn-info mr-2" onclick="getData('info')">Get Info</button>
+      <button type="button" class="btn-sm btn btn-danger" onclick="getData('question')">Get Question</button>
+    </form>
+    <div class="row mt-3">
+      <div class="col-12 mb-3">
+        <h6>Summary:</h6>
+        <div class="border border-primary p-3" id="summaryResponse">
+          <!-- Summary Response will be rendered here -->
+        </div>
+      </div>
+      <div class="col-12 mb-3">
+        <h6>Opinions:</h6>
+        <div class="border border-warning p-3" id="opinionsResponse">
+          <!-- Opinions Response will be rendered here -->
+        </div>
+      </div>
+      <div class="col-12 mb-3">
+        <h6>Info:</h6>
+        <div class="border border-info p-3" id="infoResponse">
+          <!-- Info Response will be rendered here -->
+        </div>
+      </div>
+      <div class="col-12 mb-3">
+        <h6>Question:</h6>
+        <div class="border border-danger p-3" id="questionResponse">
+          <!-- Question Response will be rendered here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function getData(method) {
+      var url = $('#urlInput').val();
+      $.ajax({
+        type: 'GET',
+        url: `/get-${method}?url=${url}`,
+        success: function(response) {
+          // Render response in respective box based on method
+          switch(method) {
+            case 'summary':
+              $('#summaryResponse').html(`<p>${response.response}</p>`);
+              break;
+            case 'opinions':
+              $('#opinionsResponse').html(`<p>${response.response}</p>`);
+              break;
+            case 'info':
+              $('#infoResponse').html(`<p>${response.response}</p>`);
+              break;
+            case 'question':
+              $('#questionResponse').html(`<p>${response.response}</p>`);
+              break;
+            default:
+              break;
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
